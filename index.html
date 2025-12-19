@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khalid Alabyad - Senior Odoo Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151b3b;
+            --bg-card: #1a2040;
+            --accent-primary: #00d9ff;
+            --accent-secondary: #7c3aed;
+            --accent-tertiary: #f59e0b;
+            --text-primary: #e4e4f0;
+            --text-secondary: #a0a4c0;
+            --text-muted: #6b7089;
+            --border-color: #2d3454;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, #00d9ff 0%, #7c3aed 100%);
+            --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            background: var(--bg-primary);
+            overflow-x: hidden;
+        }
+
+        /* Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(124, 58, 237, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 217, 255, 0.15) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(-50px, -50px); }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        /* Header/Hero Section */
+        header {
+            position: relative;
+            padding: 120px 0 80px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .profile-photo-container {
+            margin-bottom: 30px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        .profile-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid var(--accent-primary);
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+            object-fit: cover;
+            transition: all 0.4s ease;
+            animation: fadeIn 1s ease;
+        }
+
+        .profile-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(0, 217, 255, 0.6), 0 12px 48px rgba(0, 0, 0, 0.6);
+        }
+
+        .hero-label {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid var(--accent-primary);
+            border-radius: 50px;
+            color: var(--accent-primary);
+            font-size: 0.85em;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .hero-content h1 {
+            font-size: 4.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease;
+            letter-spacing: -2px;
+        }
+
+        .hero-content .tagline {
+            font-size: 1.5em;
+            color: var(--text-secondary);
+            margin-bottom: 35px;
+            font-weight: 400;
+            animation: fadeIn 1s ease;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 40px;
+            animation: fadeIn 1.2s ease;
+        }
+
+        .contact-info a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-size: 0.95em;
+        }
+
+        .contact-info a:hover {
+            transform: translateY(-3px);
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            box-shadow: 0 8px 24px rgba(0, 217, 255, 0.2);
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(26, 32, 64, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px 0;
+            gap: 10px;
+        }
+
+        nav ul li a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-primary);
+            background: rgba(0, 217, 255, 0.1);
+        }
+
+        /* Sections */
+        section {
+            margin: 80px auto;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-label {
+            color: var(--accent-primary);
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        h2 {
+            font-size: 2.8em;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: -1px;
+        }
+
+        .section-description {
+            color: var(--text-secondary);
+            font-size: 1.1em;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* About Section */
+        .about-content {
+            background: var(--bg-card);
+            padding: 50px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+        }
+
+        .about-content p {
+            font-size: 1.15em;
+            line-height: 1.9;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .about-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Experience & Projects Cards */
+        .experience-item, .project-item, .award-item {
+            background: var(--bg-card);
+            margin-bottom: 30px;
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-item::before, .project-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .experience-item:hover, .project-item:hover {
+            transform: translateX(8px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 12px 40px rgba(0, 217, 255, 0.15);
+        }
+
+        .experience-item:hover::before, .project-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .experience-item h3, .project-item h3 {
+            color: var(--text-primary);
+            font-size: 1.6em;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .experience-item .company, .project-item .tech {
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.05em;
+        }
+
+        .experience-item .duration {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+
+        .experience-item ul, .project-item ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .experience-item li, .project-item li {
+            margin-bottom: 12px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .experience-item li::before, .project-item li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent-primary);
+            font-size: 1.2em;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .skill-category {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 16px 16px 0 0;
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+        }
+
+        .skill-category:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-primary);
+            box-shadow: 0 12px 40px rgba(0, 217, 255, 0.15);
+        }
+
+        .skill-category:hover::before {
+            transform: scaleX(1);
+        }
+
+        .skill-category h3 {
+            color: var(--text-primary);
+            margin-bottom: 18px;
+            font-size: 1.25em;
+            font-weight: 600;
+        }
+
+        .skill-category p {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-size: 0.95em;
+        }
+
+        /* Awards */
+        .award-item {
+            border-left: 4px solid var(--accent-tertiary);
+        }
+
+        .award-item h3 {
+            color: var(--accent-tertiary);
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .award-item .organization {
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .award-item .duration {
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .award-item ul {
+            list-style: none;
+        }
+
+        .award-item li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .award-item li::before {
+            content: '🏆';
+            position: absolute;
+            left: 0;
+        }
+
+        /* Education */
+        .education-item {
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-secondary);
+        }
+
+        .education-item h3 {
+            color: var(--text-primary);
+            font-size: 1.6em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .education-item .company {
+            color: var(--accent-primary);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .education-item .duration {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 50px 0;
+            margin-top: 100px;
+        }
+
+        footer p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        footer p:last-child {
+            color: var(--text-muted);
+            font-size: 0.9em;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .profile-photo {
+                width: 150px;
+                height: 150px;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5em;
+            }
+
+            .hero-content .tagline {
+                font-size: 1.2em;
+            }
+
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px 0;
+            }
+
+            section {
+                margin: 50px auto;
+            }
+
+            h2 {
+                font-size: 2em;
+            }
+
+            .about-content, .experience-item, .project-item {
+                padding: 25px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="hero-content">
+                <div class="profile-photo-container">
+                    <img src="profile.jpg" alt="Khalid Alabyad" class="profile-photo">
+                </div>
+                <div class="hero-label">AVAILABLE FOR OPPORTUNITIES</div>
+                <h1>Khalid Alabyad</h1>
+                <p class="tagline">Senior Odoo Developer & Full-Stack Engineer</p>
+                <div class="contact-info">
+                    <a href="tel:+201023853823">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                        (+20) 01023853823
+                    </a>
+                    <a href="mailto:khalidalabyad99@gmail.com">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/>
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"/>
+                        </svg>
+                        Email Me
+                    </a>
+                    <a href="https://www.linkedin.com/in/khalid-alabyad-b10082168/" target="_blank">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                        </svg>
+                        LinkedIn
+                    </a>
+                    <a href="https://github.com/khalid100000" target="_blank">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul>
+            <li><a href="#about">About</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#education">Education</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#awards">Awards</a></li>
+        </ul>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <div class="section-header">
+            <div class="section-label">Get To Know Me</div>
+            <h2>About Me</h2>
+        </div>
+        <div class="about-content">
+            <p>I am a passionate and experienced Odoo Developer with a strong background in developing and customizing ERP solutions. With expertise in full-stack development, I specialize in creating tailored solutions for Real Estate, CRM, eCommerce, and various business modules.</p>
+            <p>My experience spans across multiple industries, and I have a proven track record of delivering high-quality solutions that enhance operational efficiency and drive business growth. Currently working at The Address Holding in Egypt, I focus on developing innovative solutions for the real estate sector while collaborating with cross-functional teams to deliver exceptional results.</p>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="container">
+        <div class="section-header">
+            <div class="section-label">My Journey</div>
+            <h2>Professional Experience</h2>
+        </div>
+        
+        <div class="experience-item">
+            <h3>Full-Time Odoo Developer</h3>
+            <div class="company">The Address Holding Egypt - 5th Settlement</div>
+            <div class="duration">April 2024 – Present</div>
+            <ul>
+                <li>Developed and customized the Real Estate module to enhance property management and streamline sales processes, significantly improving operational efficiency</li>
+                <li>Implemented tailored solutions for accounting and HR modules, optimizing financial reporting and workforce management</li>
+                <li>Collaborated with the backend team to manage APIs, ensuring seamless integration between systems</li>
+                <li>Partnered with accounting, sales operations, and finance teams to deliver customized solutions aligned with business objectives</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <h3>Full-Time Odoo Developer</h3>
+            <div class="company">Radioactive (Outsourcing) Bulgaria - Remote</div>
+            <div class="duration">August 2023 – April 2024</div>
+            <ul>
+                <li>Developed and optimized CRM, eCommerce, and website modules, enhancing user experience and driving sales growth</li>
+                <li>Integrated Zoho and other APIs to streamline data collection and improve lead management processes</li>
+                <li>Managed deployment and maintenance of Odoo services on on-demand servers, ensuring high availability and performance</li>
+            </ul>
+        </div>
+
+        <div class="experience-item">
+            <h3>Odoo Software Developer</h3>
+            <div class="company">Digizilla Egypt - Nasr City</div>
+            <div class="duration">May 2023 – August 2023</div>
+            <ul>
+                <li>Developed and customized Odoo modules including Sales, Purchase, Inventory, Project, CRM, Survey, and Accounting</li>
+                <li>Collaborated with implementation team to design and implement new features and enhancements</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="container">
+        <div class="section-header">
+            <div class="section-label">Academic Background</div>
+            <h2>Education</h2>
+        </div>
+        <div class="education-item">
+            <h3>Bachelor of Communications and Information Engineering</h3>
+            <div class="company">University of Science and Technology in Zewail City</div>
+            <div class="duration">August 2017 – August 2022</div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="container">
+        <div class="section-header">
+            <div class="section-label">What I've Built</div>
+            <h2>Featured Projects</h2>
+        </div>
+        
+        <div class="project-item">
+            <h3>Egyptian Dialect Chatbot on Robot</h3>
+            <div class="tech">Deep Learning • Rasa Chatbot • ROS • Python • SQL</div>
+            <div class="duration">June 2022</div>
+            <ul>
+                <li>Graduation project featuring speech-to-text using Google Cloud API, RASA chatbot, and text-to-speech synthesis</li>
+                <li>Integrated on ROS for NOOR Robot at Zewail City</li>
+                <li>Recognized as top 5 project in FDC Stars Techathon</li>
+            </ul>
+        </div>
+
+        <div class="project-item">
+            <h3>League of Legends Data Analysis with Spark</h3>
+            <div class="tech">Big Data • Python • Apache Spark • Tableau</div>
+            <div class="duration">2021</div>
+            <ul>
+                <li>Analyzed 200,000+ matches retrieved from Riot API</li>
+                <li>Performed 15+ map-reduce jobs using Spark</li>
+                <li>Created comprehensive visualizations using Tableau</li>
+            </ul>
+        </div>
+
+        <div class="project-item">
+            <h3>Image Search & Retrieval Engine</h3>
+            <div class="tech">Computer Vision • OpenCV • Flask • Python</div>
+            <div class="duration">2022</div>
+            <ul>
+                <li>Implemented CBIR and SIFT Descriptor algorithms</li>
+                <li>Built web application using Flask framework</li>
+                <li>Applied advanced computer vision techniques for feature extraction</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="container">
+        <div class="section-header">
+            <div class="section-label">My Toolkit</div>
+            <h2>Technical Skills</h2>
+        </div>
+        <div class="skills-grid">
+            <div class="skill-category">
+                <h3>Languages</h3>
+                <p>Python, JavaScript, C/C++, C#, Matlab, SQL, HTML, CSS</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Core Skills</h3>
+                <p>OOP, Data Structures, Algorithms, Problem Solving, Competitive Programming</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Frameworks</h3>
+                <p>Odoo, FastAPI, Flask, Django</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Data Science</h3>
+                <p>Hadoop, Spark, Tableau, MongoDB, OpenCV, Scikit-Image, NLTK, Machine Learning, Deep Learning, Rasa</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Developer Tools</h3>
+                <p>Git, VS Code, Visual Studio, PyCharm, IntelliJ, Eclipse</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Libraries</h3>
+                <p>Pandas, NumPy, Matplotlib, Keras, OpenCV, Spark</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Hardware</h3>
+                <p>Arduino, ESP32, Raspberry Pi</p>
+            </div>
+            
+            <div class="skill-category">
+                <h3>Mathematics</h3>
+                <p>Linear Algebra, Probability, Statistics, Linear & Nonlinear Programming</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Awards Section -->
+    <section id="awards" class="container">
+        <div class="section-header">
+            <div class="section-label">Recognition</div>
+            <h2>Honors & Awards</h2>
+        </div>
+        
+        <div class="award-item">
+            <h3>3rd Place - EVER Competition</h3>
+            <div class="organization">EVER EGYPT - Pyramids of Giza</div>
+            <div class="duration">2021</div>
+            <ul>
+                <li>Achieved 3rd place among 18 teams from universities across Egypt</li>
+                <li>Won prize of 75,000 EGP</li>
+                <li>Served as embedded systems engineer</li>
+            </ul>
+        </div>
+
+        <div class="award-item">
+            <h3>Top 5 - FDC STARS Techathon</h3>
+            <div class="organization">The Future of Data Centers</div>
+            <div class="duration">June 2022</div>
+            <ul>
+                <li>Selected as top 5 team to present at Intercontinental Hotel</li>
+                <li>Showcased innovative project ideas in data center technology</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Khalid Alabyad. All Rights Reserved.</p>
+            <p>Designed & Built with passion</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / scrollHeight) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+        });
+    </script>
+</body>
+</html>
